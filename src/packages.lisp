@@ -35,4 +35,7 @@
 	   #:testing-label-data-pathname
 	   
 	   #:map-training-data
-	   #:map-testing-data))
+	   #:map-testing-data
+
+	   #:create-image-data-file
+	   #:create-label-data-file))
