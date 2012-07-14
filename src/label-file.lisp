@@ -16,6 +16,9 @@
 (defgeneric map-labels (function data)
   (:documentation "Call FUNCTION for each label in DATA."))
 
+(defgeneric label (data index)
+  (:documentation "Return the label at INDEX."))
+
 ;; default implementations
 (defmethod close-data ((data t))
   (close (data-stream data)))
@@ -63,9 +66,9 @@
   (and (>= label 0)
        (<= label 9)))
 
-(defun label (label-data index)
-  (label-data-position label-data index)
-  (let ((rv (read-unsigned-byte (data-stream label-data))))
+(defmethod label ((data label-data) index)
+  (label-data-position data index)
+  (let ((rv (read-unsigned-byte (data-stream data))))
     (assert (valid-label-p rv))
     rv))
 
