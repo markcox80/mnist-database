@@ -18,4 +18,10 @@
 	   #:map-images
 	   
 	   #:do-with-image-data
-	   #:with-image-data))
+	   #:with-image-data
+
+	   #:map-images-and-labels
+	   #:open-image-and-label-data
+	   
+	   #:do-with-image-and-label-data
+	   #:with-image-and-label-data))
