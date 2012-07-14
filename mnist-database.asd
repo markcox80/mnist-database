@@ -7,4 +7,5 @@
 			:components ((:file "packages")
 				     (:file "label-file")
 				     (:file "image-file")
-				     (:file "images-and-labels")))))
+				     (:file "images-and-labels")
+				     (:file "experiments")))))

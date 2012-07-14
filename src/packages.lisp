@@ -24,4 +24,15 @@
 	   #:open-image-and-label-data
 	   
 	   #:do-with-image-and-label-data
-	   #:with-image-and-label-data))
+	   #:with-image-and-label-data
+
+	   #:*path-to-mnist-database*
+	   #:path-to-mnist-database
+	   
+	   #:training-image-data-pathname
+	   #:testing-image-data-pathname
+	   #:training-label-data-pathname
+	   #:testing-label-data-pathname
+	   
+	   #:map-training-data
+	   #:map-testing-data))
