@@ -75,7 +75,8 @@ authors. See MAP-TRAINING-DATA and MAP-TESTING-DATA. In order for
 these functions to work, the variable *PATH-TO-MNIST-DATABASE* must be
 set to a valid directory pathname. One can also assign logical
 pathname translations for the virtual host MNIST-DATABASE. See the
-documentation string for the function PATH-TO-MNIST-DATABASE.
+documentation string for the function PATH-TO-MNIST-DATABASE for more
+information.
 
 The functions CREATE-IMAGE-DATA-FILE and CREATE-LABEL-DATA-FILE can be
 used to create new IDX image and label files.
