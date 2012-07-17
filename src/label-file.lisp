@@ -1,48 +1,65 @@
 (in-package "MNIST-DATABASE")
 
 (defgeneric number-of-items (data)
-  (:documentation "Returns the number of items in DATA."))
+  (:documentation "The number of entries in the opened IDX file object
+  DATA. This number is extracted from the header of the IDX file."))
 
 (defgeneric data-stream (data)
   (:documentation "Return the stream used to extract the actual data
-  contained in DATA."))
+  contained in the IDX file."))
 
 (defgeneric data-pathname (data)
-  (:documentation ""))
+  (:documentation "The pathname to the IDX opened IDX file."))
 
 (defgeneric close-data (data)
-  (:documentation "Close resources used to read from DATA."))
+  (:documentation "Close any resources required to read from DATA."))
 
 (defgeneric map-labels (function data)
-  (:documentation "Call FUNCTION for each label in DATA."))
+  (:documentation "Call FUNCTION for each label in DATA.
+
+FUNCTION must accept one argument, the label. The argument is always
+of type (INTEGER 0 9).
+
+MAP-LABELS is undefined if the function LABEL is called inside
+FUNCTION using the same DATA object.
+"))
 
 (defgeneric label (data index)
-  (:documentation "Return the label at INDEX."))
+  (:documentation "Return the label in position INDEX of DATA."))
 
 ;; default implementations
 (defmethod close-data ((data t))
+  "Close the stream used to extract data from the IDX file."
   (close (data-stream data)))
 
 ;; label data files
 (defclass label-data ()
   ((number-of-items
     :initarg :number-of-items
-    :reader number-of-items)
+    :reader number-of-items
+    :documentation "The number of items in the IDX file according to
+    its header.")
    (stream
     :initarg :stream
-    :reader data-stream)
+    :reader data-stream
+    :documentation "The stream used to extract data from the IDX
+    file.")
    (pathname
     :initarg :pathname
-    :reader data-pathname)))
+    :reader data-pathname
+    :documentation "The pathname to the IDX file.")))
 
 (defun read-32-bit-integer (stream)
+  "Read a 32 bit integer at the current file position in STREAM."
   (com.gigamonkeys.binary-data:read-value 'com.gigamonkeys.binary-data.common-datatypes:u4 stream))
 
 (defun read-unsigned-byte (stream)
+  "Read an unsigned byte at the current file position in STREAM."
   (com.gigamonkeys.binary-data:read-value 'com.gigamonkeys.binary-data.common-datatypes:u1 stream))
 
-(defun open-label-data (pathname &key (if-does-not-exist :error))
-  (let ((stream (open pathname :element-type '(unsigned-byte 8) :if-does-not-exist if-does-not-exist)))
+(defun open-label-data (pathname)
+  "Open an IDX label file at PATHNAME for reading."
+  (let ((stream (open pathname :element-type '(unsigned-byte 8))))
     (unless (= 2049 (read-32-bit-integer stream))
       (error "Magic number 2049 has not been found."))
 
@@ -52,7 +69,10 @@
 		   :pathname pathname)))
 
 (defun label-data-position (label-data index)
-  "Seek to position in the label data file to read the INDEXth label."
+  "Seek to position in the label data file to read the INDEXth label.
+
+I am not overly fond of this function name, but I have chosen it in
+order to be consistent with the FILE-POSITION function."
   (declare (type label-data label-data))
   (unless (and (>= index 0) (< (number-of-items label-data)))
     (error "Label index ~d is invalid." index))
@@ -63,8 +83,8 @@
       (error "Unable to seek to label index.")))
 
 (defun valid-label-p (label)
-  (and (>= label 0)
-       (<= label 9)))
+  "Returns T if LABEL is of type (INTEGER 0 9)."
+  (typep label '(integer 0 9)))
 
 (defmethod label ((data label-data) index)
   (label-data-position data index)
@@ -82,25 +102,34 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun do-with-open-data (function data)
+    "Execute FUNCTION with DATA and return its result. When control
+leaves FUNCTION, either normally or abnormally, the data object is
+automatically closed using CLOSE-DATA."
     (unwind-protect
 	 (funcall function data)
       (close-data data)))
-
+  
   (defmacro with-open-data ((var data) &body body)
+    "A more convenient interface to DO-WITH-OPEN-DATA."
     `(do-with-open-data #'(lambda (,var)
 			    ,@body)
        ,data)))
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (defun do-with-label-data (function pathname &key (if-does-not-exist :error))
-    (with-open-data (d (open-label-data pathname :if-does-not-exist if-does-not-exist))
+(eval-when (:compile-toplevel :load-toplevel :execute)  
+  (defun do-with-label-data (function pathname)
+    "Execute FUNCTION using an opened data object obtained by
+OPEN-LABEL-DATA. When control leaves FUNCTION, either normally or
+abnormally, the data object is automatically closed using CLOSE-DATA."
+    (with-open-data (d (open-label-data pathname))
       (funcall function d)))
 
-  (defmacro with-label-data ((var pathname &key (if-does-not-exist :error)) &body body)
+  (defmacro with-label-data ((var pathname) &body body)
+    "A more convenient interface to DO-WITH-LABEL-DATA."
     `(do-with-label-data #'(lambda (,var)
 			     ,@body)
-       ,pathname :if-does-not-exist ,if-does-not-exist)))
+       ,pathname)))
 
 (defmethod map-labels (function (data string))
+  "Open the IDX label file at pathname and call MAP-LABELS."
   (with-label-data (obj data)
     (map-labels function obj)))
