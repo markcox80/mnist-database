@@ -32,7 +32,10 @@ is made using the object DATA."))
 Instances of this class are created using
 OPEN-IMAGE-AND-LABEL-DATA. The function CLOSE-DATA must be called on
 instances of IMAGE-AND-LABEL-DATA in order to release any allocated
-system resources."))
+system resources.
+
+Instances of this class should only be constructed from within the
+MNIST-DATABASE package."))
 
 (defmethod close-data ((data image-and-label-data))
   (close-data (image-data data))

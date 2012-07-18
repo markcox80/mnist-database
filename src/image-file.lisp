@@ -55,7 +55,10 @@ IDX protocol.
 
 Instances of this class are created using OPEN-IMAGE-DATA. All system
 resources allocated during OPEN-IMAGE-DATA are released when
-CLOSE-DATA is invoked on an instance."))
+CLOSE-DATA is invoked on an instance.
+
+Instances of this class should only be constructed from within the
+MNIST-DATABASE package."))
 
 (defmethod number-of-images ((data image-data))
   (number-of-items data))
