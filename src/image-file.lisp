@@ -6,6 +6,9 @@
 (defgeneric number-of-columns-per-image (data)
   (:documentation "The number of columns in each image contained in DATA."))
 
+(defgeneric image-dimensions (data)
+  (:documentation "The dimensions of the array containing the image data."))
+
 (defgeneric number-of-images (data)
   (:documentation "The number of images contained in DATA."))
 
@@ -62,6 +65,10 @@ MNIST-DATABASE package."))
 
 (defmethod number-of-images ((data image-data))
   (number-of-items data))
+
+(defmethod image-dimensions (data)
+  (list (number-of-rows-per-image data)
+	(number-of-columns-per-image data)))
 
 (defun open-image-data (pathname)
   "Open the image IDX file at PATHNAME for reading. The object
