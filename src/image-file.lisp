@@ -46,7 +46,16 @@ MAP-IMAGES is undefined if IMAGE is called inside FUNCTION."))
    (pathname
     :initarg :pathname
     :reader data-pathname
-    :documentation "The pathname to the opened IDX file.")))
+    :documentation "The pathname to the opened IDX file."))
+  (:documentation "This class encapsulates the resources necessary for
+  reading information from an image IDX file.
+
+Instances of this class can be used as the data object in the image
+IDX protocol.
+
+Instances of this class are created using OPEN-IMAGE-DATA. All system
+resources allocated during OPEN-IMAGE-DATA are released when
+CLOSE-DATA is invoked on an instance."))
 
 (defmethod number-of-images ((data image-data))
   (number-of-items data))
