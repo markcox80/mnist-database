@@ -16,6 +16,9 @@
 	   #:open-image-data
 	   #:image
 	   #:map-images
+	   #:number-of-rows-per-image
+	   #:number-of-columns-per-image
+	   #:image-dimensions
 	   
 	   #:do-with-image-data
 	   #:with-image-data
