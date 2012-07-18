@@ -25,7 +25,9 @@ FUNCTION using the same DATA object.
 "))
 
 (defgeneric label (data index)
-  (:documentation "Return the label in position INDEX of DATA."))
+  (:documentation "Return the label in position INDEX of DATA.
+
+The integer value INDEX should satisfy 0 <= INDEX < (NUMBER-OF-ITEMS DATA)"))
 
 ;; default implementations
 (defmethod close-data ((data t))
