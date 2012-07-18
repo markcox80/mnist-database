@@ -49,7 +49,18 @@ The integer value INDEX should satisfy 0 <= INDEX < (NUMBER-OF-ITEMS DATA)"))
    (pathname
     :initarg :pathname
     :reader data-pathname
-    :documentation "The pathname to the IDX file.")))
+    :documentation "The pathname to the IDX file."))
+  (:documentation "This class encapsulates all resources necessary for
+  retrieving information from a label IDX file.
+
+This object can be used as the DATA argument in the label IDX protocol.
+
+Instances of this class are createding using the OPEN-LABEL-DATA
+function. All system resources allocated are released when calling
+CLOSE-DATA on an instance.
+
+Instances of this class should only be constructed from within the
+MNIST-DATABASE package."))
 
 (defun read-32-bit-integer (stream)
   "Read a 32 bit integer at the current file position in STREAM."
