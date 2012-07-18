@@ -9,4 +9,6 @@
 				     (:file "image-file")
 				     (:file "images-and-labels")
 				     (:file "experiments")
-				     (:file "creation")))))
+				     (:file "creation"))))
+
+  :in-order-to ((test-op (test-op "mnist-database-tests"))))
