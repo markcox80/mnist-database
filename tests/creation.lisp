@@ -2,6 +2,9 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun do-with-temporary-pathname (function)
+    "Call FUNCTION with a temporary pathname. When control leaves
+FUNCTION, either normally or abnormally, the file at the pathname is
+deleted."
     (let ((temporary-pathname (temporary-file:with-open-temporary-file (out :keep t)
 				(truename out))))
       (unwind-protect
@@ -10,10 +13,14 @@
 	  (delete-file temporary-pathname)))))
 
   (defmacro with-temporary-pathname ((var) &body body)
+    "A more convenient interface to DO-WITH-TEMPORARY-PATHNAME."
     `(do-with-temporary-pathname #'(lambda (,var)
 				     ,@body))))
 
 (defun convert-to-image (array)
+  "Convert a 2D ARRAY to A (SIMPLE-ARRAY (UNSIGNED-BYTE 8)). 
+
+ARRAY must contain (UNSIGNED-BYTE 8)."
   (assert (= 2 (array-rank array)))
   (let ((rv (make-array (array-dimensions array) :element-type '(unsigned-byte 8))))
     (dotimes (i (array-dimension array 0))
@@ -22,6 +29,9 @@
     rv))
 
 (defun image-equal (a b)
+  "A predicate that determines if two images A and B contain the same
+contents. The array arguments must be of rank 2 and have the same
+dimension."
   (and (equal (array-dimensions a)
 	      (array-dimensions b))
        (block element-check
