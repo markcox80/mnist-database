@@ -1,0 +1,20 @@
+The MNIST-DATABASE system provides an API for reading the label and
+image data contained in the MNIST database available at
+http://yann.lecun.com/exdb/mnist/.
+
+The system consists of a single package MNIST-DATABASE. Documentation
+on using the system can found by executing the following in the
+read-eval-print loop.
+
+(describe (find-package "MNIST-DATABASE"))
+
+If you have not downloaded the MNIST database, the system
+MNIST-DATABASE-DOWNLOAD contains a function
+MNIST-DATABASE.DOWNLOAD:DOWNLOAD-MNIST-DATABASE that will download the
+entire database (63M uncompressed) from the above website. The local
+location of the database can be set by assigning a value to
+MNIST-DATABASE:*PATH-TO-MNIST-DATABASE* or using the logical host
+"MNIST-DATABASE".
+
+Unit tests for the system can be executed with
+(asdf:test-system "mnist-database")
