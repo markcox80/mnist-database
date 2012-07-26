@@ -168,7 +168,18 @@ abnormally, the data object is automatically closed using CLOSE-DATA."
 			     ,@body)
        ,pathname)))
 
-(defmethod map-labels (function (data string))
-  "Open the IDX label file at pathname and call MAP-LABELS."
-  (with-label-data (obj data)
+(defmethod map-labels (function (pathname string))
+  "Open the IDX label file at PATHNAME and call MAP-LABELS."
+  (with-label-data (obj pathname)
     (map-labels function obj)))
+
+(defmethod label ((pathname string) index)
+  "Open the IDX label file at PATHNAME and call LABEL on it using
+  INDEX."
+  (label (parse-namestring pathname) index))
+
+(defmethod label ((pathname pathname) index)
+  "Open the IDX label file at PATHNAME and call LABEL on it using
+  INDEX."
+  (with-label-data (data pathname)
+    (label data index)))

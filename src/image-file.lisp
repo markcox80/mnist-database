@@ -169,3 +169,14 @@ abnormally, the data object is automatically closed using CLOSE-DATA."
 object."
   (with-image-data (data pathname)
     (map-images function data)))
+
+(defmethod image ((path string) index)
+  "Open the IDX image file at PATH and call IMAGE using the given
+INDEX."
+  (image (parse-namestring path) index))
+
+(defmethod image ((path pathname) index)
+  "Open the IDX image file at PATH and call IMAGE using the given
+INDEX."
+  (with-image-data (data path)
+    (image data index)))
